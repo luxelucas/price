@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Currency Formatter ---
     const formatCurrency = new Intl.NumberFormat('zh-TW', {
-        style: 'currency', currency: 'TWD', minimumFractionDigits: 0
+        style: 'currency', currency: 'TWD', minimumFractionDigits: 0, maximumFractionDigits: 1
     }).format;
 
     // --- Hardcoded Google Sheet ID ---
@@ -159,7 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td style="font-weight:bold; color: #3b82f6;">${item.thickness} mm</td>
                 <td>${item.type}</td>
                 <td>${item.stock} <span style="font-size:0.8rem; color:#94a3b8">片</span></td>
-                <td style="color:#10b981;">${formatCurrency(item.price)}</td>
+                <td class="price-cell">
+                    <button class="price-btn minus-btn" data-id="${item.id}">-</button>
+                    <span id="price-${item.id}" style="color:#10b981; font-weight:500; display:inline-block; min-width:45px; text-align:center;">${formatCurrency(item.price)}</span>
+                    <button class="price-btn plus-btn" data-id="${item.id}">+</button>
+                </td>
                 <td>
                     <select class="order-input" data-id="${item.id}">
                         ${optionsHTML}
@@ -169,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsBody.appendChild(tr);
         });
 
-        // Add Listeners to inputs
+        // Add Listeners to quantity inputs
         document.querySelectorAll('.order-input').forEach(inp => {
             inp.addEventListener('change', (e) => {
                 const id = e.target.dataset.id;
@@ -180,6 +184,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     selections[id] = val;
                 }
+            });
+        });
+
+        // Add Listeners to price minus buttons
+        document.querySelectorAll('.minus-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const item = sheetData.find(i => i.id === id);
+                if (item.price > 0) {
+                    item.price = Math.round((item.price - 0.1) * 10) / 10;
+                    document.getElementById(`price-${id}`).textContent = formatCurrency(item.price);
+                }
+            });
+        });
+
+        // Add Listeners to price plus buttons
+        document.querySelectorAll('.plus-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const item = sheetData.find(i => i.id === id);
+                item.price = Math.round((item.price + 0.1) * 10) / 10;
+                document.getElementById(`price-${id}`).textContent = formatCurrency(item.price);
             });
         });
 
@@ -234,11 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(selectedItems.length === 0) return;
 
-        let bodyText = "您好，這是我預訂的鋼板清單：\n\n";
+        let bodyText = "";
         selectedItems.forEach((item, index) => {
-            bodyText += `${index + 1}. 厚度 ${item.thickness}mm | 種類 ${item.type} | 數量 ${item.orderQty} 片\n`;
+            bodyText += `${index + 1}. 厚度 ${item.thickness}mm | 種類 ${item.type} | 數量 ${item.orderQty} 片 (單價: ${formatCurrency(item.price)})\n`;
         });
-        bodyText += "\n再請協助確認，謝謝！";
 
         const subject = "鋼板預訂需求";
         window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;

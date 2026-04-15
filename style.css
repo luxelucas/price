@@ -188,11 +188,31 @@ body {
     background-size: 14px;
     padding-right: 20px;
 }
-.order-input:focus { border-color: var(--accent-orange); outline: none; background-color: rgba(0,0,0,0.8); }
+.order-input focus { border-color: var(--accent-orange); outline: none; background-color: rgba(0,0,0,0.8); }
 .order-input option {
     background: var(--bg-dark);
     color: white;
 }
+
+/* Price Edit Buttons */
+.price-cell {
+    white-space: nowrap;
+}
+.price-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border-glass);
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: 0.1s;
+    vertical-align: middle;
+}
+.price-btn:hover { background: rgba(255,255,255,0.2); }
+.price-btn:active { background: var(--accent); border-color: var(--accent); }
 
 /* Modal */
 .modal-overlay {
