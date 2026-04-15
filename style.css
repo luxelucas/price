@@ -251,3 +251,92 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
     
     @page { margin: 2cm; }
 }
+
+/* Responsive / Mobile Layout */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem auto; padding: 0 0.5rem;
+    }
+    .panel {
+        padding: 1.25rem 1rem;
+    }
+    .top-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .header-actions, .header-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+    .thickness-inputs {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .thickness-inputs input:last-child {
+        grid-column: span 2;
+    }
+    .modal-content {
+        width: 95% !important;
+        padding: 0;
+    }
+    .modal-header {
+        padding: 1rem;
+    }
+    .modal-body {
+        padding: 1.5rem 1rem;
+    }
+
+    /* Convert Tables to Cards */
+    .data-table thead, .quote-summary-table thead {
+        display: none;
+    }
+    .data-table, .data-table tbody, .data-table tr, .data-table td,
+    .quote-summary-table, .quote-summary-table tbody, .quote-summary-table tr, .quote-summary-table td {
+        display: block; width: 100%;
+    }
+    .data-table tr, .quote-summary-table tr {
+        margin-bottom: 1rem;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--radius-md);
+        padding: 0.5rem;
+    }
+    .data-table td, .quote-summary-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem;
+        text-align: right;
+        border-bottom: 1px dotted rgba(255,255,255,0.1);
+    }
+    .data-table td:last-child, .quote-summary-table td:last-child {
+        border-bottom: none;
+    }
+    
+    /* Dynamic Labels for Cards */
+    .data-table td:not([colspan])::before, 
+    .quote-summary-table td:not([colspan])::before {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .data-table td:nth-child(1):not([colspan])::before { content: "厚度"; }
+    .data-table td:nth-child(2):not([colspan])::before { content: "種類"; }
+    .data-table td:nth-child(3):not([colspan])::before { content: "庫存片數"; }
+    .data-table td:nth-child(4):not([colspan])::before { content: "單價"; }
+    .data-table td:nth-child(5):not([colspan])::before { content: "選購數量"; }
+
+    .quote-summary-table td:nth-child(1):not([colspan])::before { content: "厚度"; }
+    .quote-summary-table td:nth-child(2):not([colspan])::before { content: "種類"; }
+    .quote-summary-table td:nth-child(3):not([colspan])::before { content: "片數"; }
+    .quote-summary-table td:nth-child(4):not([colspan])::before { content: "價格"; }
+
+    /* Empty state */
+    td[colspan] {
+        text-align: center !important;
+        justify-content: center !important;
+        padding: 2rem !important;
+        color: var(--text-muted) !important;
+    }
+}
