@@ -147,7 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             
             // Previous Selection recovery (if mapped by ID)
-            const prevQty = selections[item.id] || '';
+            const prevQty = parseInt(selections[item.id]) || 0;
+            const maxOptions = Math.min(10, item.stock);
+            
+            let optionsHTML = `<option value="0">0</option>`;
+            for(let i = 1; i <= maxOptions; i++) {
+                optionsHTML += `<option value="${i}" ${prevQty === i ? 'selected' : ''}>${i}</option>`;
+            }
 
             tr.innerHTML = `
                 <td style="font-weight:bold; color: #3b82f6;">${item.thickness} mm</td>
@@ -155,7 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.stock} <span style="font-size:0.8rem; color:#94a3b8">片</span></td>
                 <td style="color:#10b981;">${formatCurrency(item.price)}</td>
                 <td>
-                    <input type="number" min="0" max="${item.stock}" placeholder="數量" class="order-input" data-id="${item.id}" value="${prevQty}">
+                    <select class="order-input" data-id="${item.id}">
+                        ${optionsHTML}
+                    </select>
                 </td>
             `;
             resultsBody.appendChild(tr);
@@ -163,13 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add Listeners to inputs
         document.querySelectorAll('.order-input').forEach(inp => {
-            inp.addEventListener('input', (e) => {
+            inp.addEventListener('change', (e) => {
                 const id = e.target.dataset.id;
                 let val = parseInt(e.target.value);
-                const max = parseInt(e.target.getAttribute('max'));
-                
-                if (val < 0) { val = 0; e.target.value = 0; }
-                if (val > max) { val = max; e.target.value = max; showToast('不可超過庫存片數'); }
                 
                 if (isNaN(val) || val === 0) {
                     delete selections[id];
