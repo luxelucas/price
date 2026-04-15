@@ -30,20 +30,10 @@
     </header>
 
     <div class="container">
-        <!-- Settings Panel -->
-        <section class="panel glass">
-            <div class="panel-header">
-                <h2>系統設定 (Google Sheet 連線)</h2>
-            </div>
-            <div class="setting-group">
-                <label for="sheet-url">請貼上您的 Google Sheet 共享連結 (需設定為「知道連結的使用者皆可查看」)</label>
-                <div class="input-with-button">
-                    <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/...">
-                    <button id="connect-btn" class="secondary-btn">連線並載入資料</button>
-                </div>
-                <p id="connection-status" class="status-msg text-muted">目前未連線或無資料</p>
-            </div>
-        </section>
+        <!-- Database Connection Status -->
+        <div style="text-align: right; margin-bottom: -10px;">
+            <span id="connection-status" class="status-msg text-muted">連線中...</span>
+        </div>
 
         <!-- Search Panel -->
         <section class="panel glass">

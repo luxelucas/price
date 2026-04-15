@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selections = {}; // itemID -> quantity selected
 
     // --- DOM Elements ---
-    const sheetUrlInput = document.getElementById('sheet-url');
-    const connectBtn = document.getElementById('connect-btn');
     const connectionStatus = document.getElementById('connection-status');
     const searchBtn = document.getElementById('search-btn');
     const thicknessInputs = document.querySelectorAll('.thick-input');
@@ -27,25 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
         style: 'currency', currency: 'TWD', minimumFractionDigits: 0
     }).format;
 
-    // --- Load saved sheet URL ---
-    const savedUrl = localStorage.getItem('steelQuoteSheetUrl');
-    if (savedUrl) {
-        sheetUrlInput.value = savedUrl;
-    }
+    // --- Hardcoded Google Sheet ID ---
+    const sheetId = '1942RnYmUIFoWnVgLMQr36sh3dlQguTBKQ_FmpMqGmlo';
 
     // --- Fetch Google Sheet Data ---
-    const fetchSheet = (urlStr) => {
+    const fetchSheet = () => {
         connectionStatus.textContent = '連線中...';
         connectionStatus.className = 'status-msg';
-
-        // Extract Sheet ID
-        const match = urlStr.match(/\/d\/(.*?)(\/|$)/);
-        if (!match || !match[1]) {
-            connectionStatus.textContent = "無法解析 Google Sheet ID，請確認連結格式。";
-            connectionStatus.className = 'status-msg text-danger';
-            return;
-        }
-        const sheetId = match[1];
 
         // Setup JSONP callback
         window.google = window.google || {};
@@ -89,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 connectionStatus.textContent = `連線成功！共載入 ${sheetData.length} 筆資料。`;
                 connectionStatus.className = 'status-msg success';
-                localStorage.setItem('steelQuoteSheetUrl', urlStr);
                 showToast('資料載入成功');
 
             } catch (error) {
@@ -117,11 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(script);
     };
 
-    connectBtn.addEventListener('click', () => {
-        const url = sheetUrlInput.value.trim();
-        if (url) fetchSheet(url);
-        else showToast('請輸入連結');
-    });
+    // --- Auto Fetch on Load ---
+    fetchSheet();
 
     // --- Search Functionality ---
     searchBtn.addEventListener('click', () => {
