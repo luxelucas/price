@@ -195,15 +195,23 @@ body {
 }
 .close-btn { background: none; border: none; color: white; font-size: 2rem; cursor: pointer; line-height: 1; }
 .modal-body {
-    padding: 2rem; overflow-y: auto; background: white; color: #1e293b;
+    padding: 2rem; overflow-y: auto;
 }
 
 /* Quote Document Area */
-.quote-doc-header { margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; }
+.quote-doc-header { margin-bottom: 2rem; border-bottom: 2px solid var(--border-glass); padding-bottom: 1rem; }
 .quote-doc-header h1 { font-size: 1.8rem; font-weight: 700; }
-.quote-summary-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
-.quote-summary-table th { background: #f1f5f9; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; }
-.quote-summary-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+.quote-summary-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; text-align: left; }
+.quote-summary-table th { 
+    background: rgba(0,0,0,0.4); 
+    padding: 10px; 
+    border-bottom: 1px solid var(--border-glass); 
+    color: var(--text-muted);
+}
+.quote-summary-table td { 
+    padding: 10px; 
+    border-bottom: 1px solid rgba(255,255,255,0.05); 
+}
 
 .quote-total-section {
     display: flex; justify-content: flex-end; margin-bottom: 3rem;
@@ -272,6 +280,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
     }
     .thickness-inputs {
         grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    .thick-input {
+        width: 100%;
+        min-width: 0;
+        padding: 0.6rem;
     }
     .thickness-inputs input:last-child {
         grid-column: span 2;
@@ -287,56 +301,28 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-app
         padding: 1.5rem 1rem;
     }
 
-    /* Convert Tables to Cards */
-    .data-table thead, .quote-summary-table thead {
-        display: none;
+    /* Compact Table for Mobile */
+    .table-container {
+        margin: 0 -1rem; /* Allow table to stretch to edges */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
-    .data-table, .data-table tbody, .data-table tr, .data-table td,
-    .quote-summary-table, .quote-summary-table tbody, .quote-summary-table tr, .quote-summary-table td {
-        display: block; width: 100%;
+    .data-table th, .data-table td,
+    .quote-summary-table th, .quote-summary-table td {
+        padding: 0.5rem 0.2rem;
+        font-size: 0.85rem; /* Smaller text to fit screen */
     }
-    .data-table tr, .quote-summary-table tr {
-        margin-bottom: 1rem;
-        background: rgba(0,0,0,0.3);
-        border: 1px solid var(--border-glass);
-        border-radius: var(--radius-md);
-        padding: 0.5rem;
+    .order-input {
+        width: 50px;
+        padding: 0.3rem;
+        font-size: 0.9rem;
     }
-    .data-table td, .quote-summary-table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.8rem;
-        text-align: right;
-        border-bottom: 1px dotted rgba(255,255,255,0.1);
+    /* Hide some less critical decorative texts if needed, or just let it shrink */
+    .data-table td:nth-child(3) span {
+        display: none; /* Hide '片' text to save space */
     }
-    .data-table td:last-child, .quote-summary-table td:last-child {
-        border-bottom: none;
-    }
-    
-    /* Dynamic Labels for Cards */
-    .data-table td:not([colspan])::before, 
-    .quote-summary-table td:not([colspan])::before {
-        color: var(--text-muted);
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-    .data-table td:nth-child(1):not([colspan])::before { content: "厚度"; }
-    .data-table td:nth-child(2):not([colspan])::before { content: "種類"; }
-    .data-table td:nth-child(3):not([colspan])::before { content: "庫存片數"; }
-    .data-table td:nth-child(4):not([colspan])::before { content: "單價"; }
-    .data-table td:nth-child(5):not([colspan])::before { content: "選購數量"; }
-
-    .quote-summary-table td:nth-child(1):not([colspan])::before { content: "厚度"; }
-    .quote-summary-table td:nth-child(2):not([colspan])::before { content: "種類"; }
-    .quote-summary-table td:nth-child(3):not([colspan])::before { content: "片數"; }
-    .quote-summary-table td:nth-child(4):not([colspan])::before { content: "價格"; }
-
-    /* Empty state */
-    td[colspan] {
-        text-align: center !important;
-        justify-content: center !important;
-        padding: 2rem !important;
-        color: var(--text-muted) !important;
+    .data-table td:nth-child(1) {
+        font-size: 0.8rem; /* Make thickness px a bit smaller if needed */
     }
 }
