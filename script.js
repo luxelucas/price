@@ -222,6 +222,28 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('active');
     });
 
+    const emailBtn = document.getElementById('email-btn');
+    emailBtn.addEventListener('click', () => {
+        const selectedItems = Object.keys(selections).map(id => {
+            const item = sheetData.find(i => i.id === id);
+            return {
+                ...item,
+                orderQty: selections[id]
+            };
+        });
+
+        if(selectedItems.length === 0) return;
+
+        let bodyText = "您好，這是我預訂的鋼板清單：\n\n";
+        selectedItems.forEach((item, index) => {
+            bodyText += `${index + 1}. 厚度 ${item.thickness}mm | 種類 ${item.type} | 數量 ${item.orderQty} 片\n`;
+        });
+        bodyText += "\n再請協助確認，謝謝！";
+
+        const subject = "鋼板預訂需求";
+        window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+    });
+
     // --- Toast ---
     let toastTimeout;
     function showToast(msg) {
